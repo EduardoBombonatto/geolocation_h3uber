@@ -3,9 +3,11 @@ package com.eduardo.geolocation_h3uber.config;
 import com.uber.h3core.H3Core;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
+@Configuration
 public class AppConfig {
     @Bean
     public H3Core h3Core() throws IOException {
