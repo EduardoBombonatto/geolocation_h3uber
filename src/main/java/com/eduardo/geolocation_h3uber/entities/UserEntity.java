@@ -15,6 +15,6 @@ public class UserEntity {
     private String name;
     private String email;
 
-    @OneToOne(mappedBy = "empresa", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private AddressEntity address;
 }
