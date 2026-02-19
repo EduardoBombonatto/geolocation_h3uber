@@ -9,7 +9,6 @@ import com.eduardo.geolocation_h3uber.repositories.UserRepository;
 import com.uber.h3core.H3Core;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +25,7 @@ public class UserService {
     private final H3Core h3Core;
     private final ModelMapper modelMapper;
 
-    @Value("${h3.resolution}")
-    private static int H3_RESOLUTION;
+    private static final int H3_RESOLUTION = 6;
 
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {

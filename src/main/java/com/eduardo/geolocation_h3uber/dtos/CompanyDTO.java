@@ -1,6 +1,13 @@
 package com.eduardo.geolocation_h3uber.dtos;
 
+import lombok.Data;
+
 import java.util.UUID;
 
-public record CompanyDTO(UUID id, String name, AddressDTO address) {
+@Data
+public class CompanyDTO {
+    private UUID id;
+    private String name;
+
+    private AddressDTO address;
 }
