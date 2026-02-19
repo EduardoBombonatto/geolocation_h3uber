@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface CompanyRepository extends JpaRepository<CompanyEntity, UUID> {
     @Query("SELECT e FROM CompanyEntity e JOIN e.address addr WHERE addr.h3Index IN :h3Neighbors")
-    List<CompanyEntity> findAllByH3IndexIN(@Param("h3Neighbors") List<String> h3Neighbors);
+    List<CompanyEntity> findAllByH3IndexIn(@Param("h3Neighbors") List<String> h3Neighbors);
 }

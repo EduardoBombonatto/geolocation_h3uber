@@ -1,12 +1,11 @@
 package com.eduardo.geolocation_h3uber.dtos;
 
-import lombok.Data;
-
-@Data
-public class AddressDTO {
-    private String logradouro;
-    private String numero;
-    private Double latitude;
-    private Double longitude;
-    private String h3Index; // Preenchido apenas na resposta
+public record AddressDTO(
+        Long id,
+        String logradouro,
+        String numero,
+        Double latitude,
+        Double longitude,
+        String h3Index
+) {
 }

@@ -13,8 +13,8 @@ public class CompanyEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String nome;
+    private String name;
 
-    @OneToOne(mappedBy = "empresa", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private AddressEntity address;
 }

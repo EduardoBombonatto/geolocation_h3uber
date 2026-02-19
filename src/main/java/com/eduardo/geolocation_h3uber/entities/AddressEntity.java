@@ -17,7 +17,7 @@ public class AddressEntity {
     private Double longitude;
 
     // O índice H3 que usaremos para buscas rápidas
-    @Column(name = "h3_index", length = 15)
+    @Column(name = "h3_index")
     private String h3Index;
 
     @OneToOne
@@ -25,6 +25,6 @@ public class AddressEntity {
     private UserEntity user;
 
     @OneToOne
-    @JoinColumn(name = "compnay_id")
+    @JoinColumn(name = "company_id")
     private CompanyEntity company;
 }
