@@ -7,6 +7,9 @@ import com.eduardo.geolocation_h3uber.entities.AddressEntity;
 import com.eduardo.geolocation_h3uber.entities.CompanyEntity;
 import com.eduardo.geolocation_h3uber.entities.UserEntity;
 import com.eduardo.geolocation_h3uber.events.AddressCreatedEvent;
+import com.eduardo.geolocation_h3uber.exceptions.AddressRequiredException;
+import com.eduardo.geolocation_h3uber.exceptions.H3IndexNotFoundException;
+import com.eduardo.geolocation_h3uber.exceptions.UserNotFoundException;
 import com.eduardo.geolocation_h3uber.repositories.CompanyRepository;
 import com.eduardo.geolocation_h3uber.repositories.UserRepository;
 import com.uber.h3core.H3Core;
@@ -90,7 +93,7 @@ class UserServiceTest {
         when(modelMapper.map(inputDTO, UserEntity.class)).thenReturn(userEntity);
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> 
+        AddressRequiredException exception = assertThrows(AddressRequiredException.class, () -> 
             userService.createUser(inputDTO)
         );
 
@@ -141,7 +144,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> 
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> 
             userService.findNearbyCompanies(userId, 1)
         );
         assertEquals("Usuário não encontrado", exception.getMessage());
@@ -160,7 +163,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> 
+        H3IndexNotFoundException exception = assertThrows(H3IndexNotFoundException.class, () -> 
             userService.findNearbyCompanies(userId, 1)
         );
         assertEquals("Usuário não possui um endereço válido com índice H3", exception.getMessage());

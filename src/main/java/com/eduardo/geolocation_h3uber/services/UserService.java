@@ -5,6 +5,9 @@ import com.eduardo.geolocation_h3uber.dtos.UserDTO;
 import com.eduardo.geolocation_h3uber.entities.CompanyEntity;
 import com.eduardo.geolocation_h3uber.entities.UserEntity;
 import com.eduardo.geolocation_h3uber.events.AddressCreatedEvent;
+import com.eduardo.geolocation_h3uber.exceptions.AddressRequiredException;
+import com.eduardo.geolocation_h3uber.exceptions.H3IndexNotFoundException;
+import com.eduardo.geolocation_h3uber.exceptions.UserNotFoundException;
 import com.eduardo.geolocation_h3uber.repositories.CompanyRepository;
 import com.eduardo.geolocation_h3uber.repositories.UserRepository;
 import com.uber.h3core.H3Core;
@@ -34,7 +37,7 @@ public class UserService {
         UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
 
         if (userEntity.getAddress() == null) {
-            throw new RuntimeException("Endereço é obrigatório para criar um usuário");
+            throw new AddressRequiredException("Endereço é obrigatório para criar um usuário");
         }
 
         userEntity.getAddress().setUser(userEntity);
@@ -57,11 +60,11 @@ public class UserService {
     public List<CompanyDTO> findNearbyCompanies(UUID userId, int radiusInHexagons) {
         // 1. Busca o usuário
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         String userH3Index = user.getAddress().getH3Index();
         if (userH3Index == null) {
-            throw new RuntimeException("Usuário não possui um endereço válido com índice H3");
+            throw new H3IndexNotFoundException("Usuário não possui um endereço válido com índice H3");
         }
 
         // 2. Calcula os hexágonos vizinhos com base no raio (k-ring)
