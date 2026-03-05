@@ -33,9 +33,11 @@ public class UserService {
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
 
-        if (userEntity.getAddress() != null) {
-            userEntity.getAddress().setUser(userEntity);
+        if (userEntity.getAddress() == null) {
+            throw new RuntimeException("Endereço é obrigatório para criar um usuário");
         }
+
+        userEntity.getAddress().setUser(userEntity);
 
         UserEntity savedUser = userRepository.save(userEntity);
 
