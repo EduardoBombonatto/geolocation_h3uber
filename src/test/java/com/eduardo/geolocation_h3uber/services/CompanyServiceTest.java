@@ -4,7 +4,6 @@ import com.eduardo.geolocation_h3uber.dtos.AddressDTO;
 import com.eduardo.geolocation_h3uber.dtos.CompanyDTO;
 import com.eduardo.geolocation_h3uber.entities.AddressEntity;
 import com.eduardo.geolocation_h3uber.entities.CompanyEntity;
-import com.eduardo.geolocation_h3uber.events.AddressCreatedEvent;
 import com.eduardo.geolocation_h3uber.exceptions.AddressRequiredException;
 import com.eduardo.geolocation_h3uber.repositories.CompanyRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.ApplicationEventPublisher;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +28,7 @@ class CompanyServiceTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ApplicationEventPublisher eventPublisher;
+    private AddressEventService addressEventService;
 
     @InjectMocks
     private CompanyService companyService;
@@ -62,7 +60,7 @@ class CompanyServiceTest {
         // Assert
         assertNotNull(result);
         verify(companyRepository, times(1)).save(companyEntity);
-        verify(eventPublisher, times(1)).publishEvent(any(AddressCreatedEvent.class));
+        verify(addressEventService, times(1)).publishAddressCreatedEvent(addressEntity);
         assertEquals(companyEntity, addressEntity.getCompany());
     }
 
@@ -83,6 +81,6 @@ class CompanyServiceTest {
 
         assertEquals("Endereço é obrigatório para criar uma empresa", exception.getMessage());
         verify(companyRepository, never()).save(any());
-        verify(eventPublisher, never()).publishEvent(any());
+        verify(addressEventService, never()).publishAddressCreatedEvent(any());
     }
 }

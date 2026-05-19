@@ -21,8 +21,8 @@ public class AddressEntity {
     private String h3Index;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
 
     @OneToOne
     @JoinColumn(name = "company_id")

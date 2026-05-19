@@ -2,14 +2,14 @@ package com.eduardo.geolocation_h3uber.services.integration;
 
 import com.eduardo.geolocation_h3uber.dtos.AddressDTO;
 import com.eduardo.geolocation_h3uber.dtos.CompanyDTO;
-import com.eduardo.geolocation_h3uber.dtos.UserDTO;
+import com.eduardo.geolocation_h3uber.dtos.ClientDTO;
 import com.eduardo.geolocation_h3uber.entities.AddressEntity;
 import com.eduardo.geolocation_h3uber.entities.CompanyEntity;
-import com.eduardo.geolocation_h3uber.entities.UserEntity;
+import com.eduardo.geolocation_h3uber.entities.ClientEntity;
 import com.eduardo.geolocation_h3uber.repositories.AddressRepository;
 import com.eduardo.geolocation_h3uber.repositories.CompanyRepository;
-import com.eduardo.geolocation_h3uber.repositories.UserRepository;
-import com.eduardo.geolocation_h3uber.services.UserService;
+import com.eduardo.geolocation_h3uber.repositories.ClientRepository;
+import com.eduardo.geolocation_h3uber.services.ClientService;
 import com.eduardo.geolocation_h3uber.utils.BaseIntegrationTest;
 import com.uber.h3core.H3Core;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class UserServiceIntegrationTest extends BaseIntegrationTest {
+class ClientServiceIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    private UserService userService;
+    private ClientService clientService;
 
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private CompanyRepository companyRepository;
@@ -43,52 +43,52 @@ class UserServiceIntegrationTest extends BaseIntegrationTest {
     private H3Core h3Core;
 
     @Test
-    @DisplayName("Should create user successfully in integration context")
-    void createUser_Integration_Success() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName("Integration User");
-        userDTO.setEmail("integration@example.com");
+    @DisplayName("Should create client successfully in integration context")
+    void createClient_Integration_Success() {
+        ClientDTO clientDTO = new ClientDTO();
+        clientDTO.setName("Integration Client");
+        clientDTO.setEmail("integration@example.com");
 
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setLogradouro("Rua de Integração");
         addressDTO.setNumero("500");
         addressDTO.setLatitude(-23.55052);
         addressDTO.setLongitude(-46.633308);
-        userDTO.setAddress(addressDTO);
+        clientDTO.setAddress(addressDTO);
 
-        UserDTO result = userService.createUser(userDTO);
+        ClientDTO result = clientService.createClient(clientDTO);
 
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getName()).isEqualTo("Integration User");
+        assertThat(result.getName()).isEqualTo("Integration Client");
         assertThat(result.getAddress().getLogradouro()).isEqualTo("Rua de Integração");
 
-        UserEntity savedUser = userRepository.findById(result.getId()).orElseThrow();
-        assertThat(savedUser.getAddress()).isNotNull();
-        assertThat(savedUser.getAddress().getUser()).isEqualTo(savedUser);
+        ClientEntity savedClient = clientRepository.findById(result.getId()).orElseThrow();
+        assertThat(savedClient.getAddress()).isNotNull();
+        assertThat(savedClient.getAddress().getClient()).isEqualTo(savedClient);
     }
 
     @Test
     @DisplayName("Should find nearby companies in integration context")
     void findNearbyCompanies_Integration_Success() throws Exception {
-        // Arrange: Create a user with a manual H3 index
-        String userH3Index = h3Core.latLngToCellAddress(-23.55052, -46.633308, 6);
+        // Arrange: Create a client with a manual H3 index
+        String clientH3Index = h3Core.latLngToCellAddress(-23.55052, -46.633308, 6);
         
-        UserEntity user = new UserEntity();
-        user.setName("Finder User");
+        ClientEntity client = new ClientEntity();
+        client.setName("Finder Client");
 
-        AddressEntity userAddress = new AddressEntity();
-        userAddress.setH3Index(userH3Index);
-        userAddress.setUser(user);
-        user.setAddress(userAddress);
+        AddressEntity clientAddress = new AddressEntity();
+        clientAddress.setH3Index(clientH3Index);
+        clientAddress.setClient(client);
+        client.setAddress(clientAddress);
         
-        userRepository.save(user);
+        clientRepository.save(client);
 
         // Arrange: Create a company nearby (same index)
         CompanyEntity nearbyCompany = new CompanyEntity();
         nearbyCompany.setName("Nearby Company");
 
         AddressEntity companyAddress = new AddressEntity();
-        companyAddress.setH3Index(userH3Index);
+        companyAddress.setH3Index(clientH3Index);
         companyAddress.setCompany(nearbyCompany);
         nearbyCompany.setAddress(companyAddress);
         
@@ -107,7 +107,7 @@ class UserServiceIntegrationTest extends BaseIntegrationTest {
         companyRepository.save(farCompany);
 
         // Act
-        List<CompanyDTO> nearby = userService.findNearbyCompanies(user.getId(), 1);
+        List<CompanyDTO> nearby = clientService.findNearbyCompanies(client.getId(), 1);
 
         // Assert
         assertThat(nearby).hasSize(1);

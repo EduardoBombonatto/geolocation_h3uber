@@ -6,15 +6,15 @@ import lombok.Data;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_users")
+@Table(name = "tb_clients")
 @Data
-public class UserEntity {
+public class ClientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String email;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private AddressEntity address;
 }
