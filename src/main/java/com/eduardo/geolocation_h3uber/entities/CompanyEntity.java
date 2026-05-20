@@ -17,4 +17,7 @@ public class CompanyEntity {
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private AddressEntity address;
+
+    @OneToOne(mappedBy = "company")
+    private UserEntity user;
 }

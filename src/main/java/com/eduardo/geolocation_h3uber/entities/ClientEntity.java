@@ -13,8 +13,10 @@ public class ClientEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String email;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private AddressEntity address;
+
+    @OneToOne(mappedBy = "company")
+    private UserEntity user;
 }

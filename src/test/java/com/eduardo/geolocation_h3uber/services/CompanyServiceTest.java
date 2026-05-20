@@ -75,9 +75,8 @@ class CompanyServiceTest {
         when(modelMapper.map(inputDTO, CompanyEntity.class)).thenReturn(companyEntity);
 
         // Act & Assert
-        AddressRequiredException exception = assertThrows(AddressRequiredException.class, () -> 
-            companyService.createCompany(inputDTO)
-        );
+        AddressRequiredException exception = assertThrows(AddressRequiredException.class,
+                () -> companyService.createCompany(inputDTO));
 
         assertEquals("Endereço é obrigatório para criar uma empresa", exception.getMessage());
         verify(companyRepository, never()).save(any());
