@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "h3.resolution",
+    "type": "java.lang.String",
+    "description": "Radius of the hexagons of the h3 library"
+  },
+  {
+    "name": "api.security.token.secret",
+    "type": "java.lang.String",
+    "description": "Secret key for the JWT token"
+  }
+]}
