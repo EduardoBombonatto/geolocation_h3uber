@@ -1,17 +1,14 @@
 package com.eduardo.geolocation_h3uber.config.security;
 
-import java.util.Date;
-
-import javax.crypto.SecretKey;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.eduardo.geolocation_h3uber.entities.UserEntity;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Service
 public class TokenService {

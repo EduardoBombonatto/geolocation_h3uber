@@ -1,21 +1,20 @@
 package com.eduardo.geolocation_h3uber.config.security;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.eduardo.geolocation_h3uber.entities.UserEntity;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.eduardo.geolocation_h3uber.entities.UserEntity;
-
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -26,6 +25,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         this.tokenService = tokenService;
     }
 
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var token = this.recoverToken(request);
@@ -35,7 +35,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if (claims != null) {
                 UserEntity loggedUser = new UserEntity();
-                loggedUser.setId(claims.get("userId", String.class));
+                String userIdString = claims.get("userId", String.class);
+                loggedUser.setId(java.util.UUID.fromString(userIdString));
                 loggedUser.setEmail(claims.getSubject());
 
                 String roleName = claims.get("role", String.class);

@@ -1,16 +1,20 @@
 package com.eduardo.geolocation_h3uber.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "tb_addresses")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String logradouro;
     private String numero;
     private Double latitude;
@@ -21,10 +25,10 @@ public class AddressEntity {
     private String h3Index;
 
     @OneToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", unique = true)
     private ClientEntity client;
 
     @OneToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", unique = true)
     private CompanyEntity company;
 }

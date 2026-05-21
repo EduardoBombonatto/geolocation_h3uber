@@ -1,9 +1,13 @@
 package com.eduardo.geolocation_h3uber.controllers;
 
+import com.eduardo.geolocation_h3uber.config.security.TokenService;
 import com.eduardo.geolocation_h3uber.dtos.CompanyDTO;
-import com.eduardo.geolocation_h3uber.dtos.ClientDTO;
+import com.eduardo.geolocation_h3uber.dtos.CreateClientDTO;
+import com.eduardo.geolocation_h3uber.dtos.TokenResponseDTO;
+import com.eduardo.geolocation_h3uber.entities.UserEntity;
+import com.eduardo.geolocation_h3uber.repositories.UserRepository;
 import com.eduardo.geolocation_h3uber.services.ClientService;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +17,30 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/clients")
-@RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
 
-    @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
-        ClientDTO createdClient = clientService.createClient(clientDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
+    public ClientController(ClientService clientService, TokenService tokenService, UserRepository userRepository) {
+        this.clientService = clientService;
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<TokenResponseDTO> createClient(@Valid @RequestBody CreateClientDTO clientDTO) {
+        this.clientService.createClient(clientDTO);
+        UserEntity newUser = userRepository.findByEmail(clientDTO.email())
+                .orElseThrow(() -> new RuntimeException("Erro ao recuperar o usuário após o cadastro."));
+
+        String accessToken = tokenService.generateAccessToken(newUser);
+        String refreshToken = tokenService.generateRefreshToken(newUser);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new TokenResponseDTO(accessToken, refreshToken));
     }
 
     @GetMapping("/{clientId}/nearby-companies")

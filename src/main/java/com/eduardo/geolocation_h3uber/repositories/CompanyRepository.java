@@ -1,7 +1,7 @@
 package com.eduardo.geolocation_h3uber.repositories;
 
 import com.eduardo.geolocation_h3uber.entities.CompanyEntity;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
