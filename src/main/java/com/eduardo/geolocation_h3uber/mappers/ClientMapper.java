@@ -11,6 +11,7 @@ public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "address", ignore = true)
     ClientEntity toEntity(CreateClientDTO dto);
 
     @Mapping(target = "email", source = "user.email")

@@ -11,6 +11,7 @@ public interface CompanyMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "address", ignore = true)
     CompanyEntity toEntity(CreateCompanyDTO dto);
 
     CompanyDTO toDTO(CompanyEntity entity);

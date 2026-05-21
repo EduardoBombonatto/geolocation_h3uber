@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (claims != null) {
                 UserEntity loggedUser = new UserEntity();
                 String userIdString = claims.get("userId", String.class);
-                loggedUser.setId(java.util.UUID.fromString(userIdString));
+                loggedUser.setId(UUID.fromString(userIdString));
                 loggedUser.setEmail(claims.getSubject());
 
                 String roleName = claims.get("role", String.class);
